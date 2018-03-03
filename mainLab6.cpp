@@ -17,6 +17,7 @@ void crearAnimal();
 void llenarListas();
 void eliminarDesdeLista();
 void listarInvetario();
+vector <Animal*> ordenarArreglo(vector <Animal*>);
 
 Zoologico* zoologicoActual;
 vector <Animal*> listaEspera;
@@ -56,24 +57,27 @@ int main(){
 		listaEspera[i] = NULL;
 	}
 	listaEspera.clear();
-/*
-	for(int i=0 ; i<listaEspera ; i++){
-	
+
+	for(int i=0 ; i<zoologicoActual->getListaArticos().size() ; i++){
+		delete zoologicoActual->getListaArticos()[i];
+		zoologicoActual->getListaArticos()[i] = NULL;
 	}
 
-	if(listaEspera[i]->getTipo() == "Artico"){
-			zoologicoActual->agregarArticos(listaEspera[i]);
-		}
-		if(listaEspera[i]->getTipo() == "Desertico"){
-			zoologicoActual->agregarDeserticos(listaEspera[i]);
-		}
-		if(listaEspera[i]->getTipo() == "Junglero"){
-			zoologicoActual->agregarJungleros(listaEspera[i]);
-		}
-		if(listaEspera[i]->getTipo() == "Sabanero"){
-			zoologicoActual->agregarSabaneros(listaEspera[i]);
-		}
-*/
+	for(int i=0 ; i<zoologicoActual->getListaDeserticos().size() ; i++){
+		delete zoologicoActual->getListaDeserticos()[i];
+		zoologicoActual->getListaDeserticos()[i] = NULL;
+	}
+
+	for(int i=0 ; i<zoologicoActual->getListaJungleros().size() ; i++){
+		delete zoologicoActual->getListaJungleros()[i];
+		zoologicoActual->getListaJungleros()[i] = NULL;
+	}
+
+	for(int i=0 ; i<zoologicoActual->getListaSabaneros().size() ; i++){
+		delete zoologicoActual->getListaSabaneros()[i];
+		zoologicoActual->getListaSabaneros()[i] = NULL;
+	}
+
 	return 0;
 }
 
@@ -216,7 +220,7 @@ void eliminarDesdeLista(){
 	int indice;
 	cin>>indice;
 	indice--;
-	if(indice<0 || indice>listaEspera.size()-1){
+	if(indice<=0 || indice>listaEspera.size()-1 || listaEspera.empty()){
 		cout<<"X Invalido"<<endl;
 	}else{
 		cout<<"ELIMINADO"<<endl;
@@ -227,30 +231,60 @@ void eliminarDesdeLista(){
 }
 
 void listarInvetario(){
+	vector <Animal*> temp;
 	cout<<"\n	**Invetario"<<endl;
 
 	cout<<"ARTICOS:"<<endl;
-	for(int i=0 ; i<zoologicoActual->getListaArticos().size() ; i++){
-		cout<<"		-"<<zoologicoActual->getListaArticos()[i]->getNombreAnimal()<<endl;
+	temp = ordenarArreglo(zoologicoActual->getListaArticos());
+	for(int i=0 ; i<temp.size() ; i++){
+		cout<<"		-"<<temp[i]->getNombreAnimal()<<endl;
 	}
 	cout<<endl;
 
 	cout<<"DESERTICOS:"<<endl;
-	for(int i=0 ; i<zoologicoActual->getListaDeserticos().size() ; i++){
-		cout<<"		-"<<zoologicoActual->getListaDeserticos()[i]->getNombreAnimal()<<endl;
+	temp = ordenarArreglo(zoologicoActual->getListaDeserticos());
+	for(int i=0 ; i<temp.size() ; i++){
+		cout<<"		-"<<temp[i]->getNombreAnimal()<<endl;
 	}
 	cout<<endl;
 
 	cout<<"DE JUNGLA:"<<endl;
-	for(int i=0 ; i<zoologicoActual->getListaJungleros().size() ; i++){
-		cout<<"		-"<<zoologicoActual->getListaJungleros()[i]->getNombreAnimal()<<endl;
+	temp = ordenarArreglo(zoologicoActual->getListaJungleros());
+	for(int i=0 ; i<temp.size() ; i++){
+		cout<<"		-"<<temp[i]->getNombreAnimal()<<endl;
 	}
 	cout<<endl;
 
 	cout<<"DE SABANA:"<<endl;
-	for(int i=0 ; i<zoologicoActual->getListaSabaneros().size() ; i++){
-		cout<<"		-"<<zoologicoActual->getListaSabaneros()[i]->getNombreAnimal()<<endl;
+	temp = ordenarArreglo(zoologicoActual->getListaSabaneros());
+	for(int i=0 ; i<temp.size() ; i++){
+		cout<<"		-"<<temp[i]->getNombreAnimal()<<endl;
 	}
 	cout<<endl;
 	cout<<"--Fin inventario--"<<endl;
+}
+
+vector <Animal*> ordenarArreglo(vector <Animal*> vectorAOrdenar){
+	Animal* temp;
+
+	for (int i=1; i<vectorAOrdenar.size(); i++){
+    	for (int j=0 ; j<vectorAOrdenar.size() - 1; j++){
+               if (vectorAOrdenar[j]->getNombreAnimal()[0] > vectorAOrdenar[j+1]->getNombreAnimal()[0]){
+                    temp = vectorAOrdenar[j];
+                    vectorAOrdenar[j] = vectorAOrdenar[j+1];
+                  	vectorAOrdenar[j+1] = temp;
+			   }
+		}
+	}
+
+	for (int i=1; i<vectorAOrdenar.size(); i++){
+    	for (int j=0 ; j<vectorAOrdenar.size() - 1; j++){
+               if (vectorAOrdenar[j]->getNombreAnimal()[1] > vectorAOrdenar[j+1]->getNombreAnimal()[1]){
+                    temp = vectorAOrdenar[j];
+                    vectorAOrdenar[j] = vectorAOrdenar[j+1];
+                  	vectorAOrdenar[j+1] = temp;
+			   }
+		}
+	}
+	return vectorAOrdenar;
 }
